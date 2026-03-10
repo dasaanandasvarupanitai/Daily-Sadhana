@@ -196,7 +196,7 @@ export function usePreviousListenings(userId: string | undefined) {
   useEffect(() => {
     loadMore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  }, []);
 
   return { listenings, loading, loadMore, hasMore };
 }
