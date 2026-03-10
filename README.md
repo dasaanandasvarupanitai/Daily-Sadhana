@@ -18,7 +18,7 @@ A Next.js web application for delivering a daily listening track to students. Fe
    - Add a new project.
    - Enable **Authentication** -> Add **Google Sign-In**.
    - Enable **Firestore Database** (start in production mode).
-   - Go to Project Settings -> Service Accounts -> **Generate new private key**. Save this JSON file securely.
+   - Go to Project Settings -> Service Accounts -> **Generate new private key**. Open this JSON file in a text editor to get your `client_email` and `private_key` for the next step.
 
 ---
 
@@ -31,11 +31,12 @@ NEXT_PUBLIC_FIREBASE_API_KEY="your-api-key"
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="your-project.firebaseapp.com"
 NEXT_PUBLIC_FIREBASE_PROJECT_ID="your-project-id"
 
-# Path to the downloaded service account JSON file for the CLI tools
-FIREBASE_SERVICE_ACCOUNT_KEY_PATH="./service-account-key.json"
+# Firebase Admin SDK credentials for the CLI script
+FIREBASE_CLIENT_EMAIL="firebase-adminsdk-xxx@your-project-id.iam.gserviceaccount.com"
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_KEY_HERE\n-----END PRIVATE KEY-----\n"
 ```
 
-> **WARNING**: Never commit `.env.local` or the `service-account-key.json` file to GitHub.
+> **WARNING**: Never commit `.env.local` to GitHub. It contains your private server keys.
 
 ---
 
@@ -81,7 +82,7 @@ node scripts/create-template.js
 Open `listenings-template.xlsx` and add your rows. The columns must be exactly: `Number`, `Title`, `URL`.
 
 ### C) Import to Firestore
-Use the included CLI script (requires `FIREBASE_SERVICE_ACCOUNT_KEY_PATH` in your `.env.local`).
+Use the included CLI script (requires your `FIREBASE_CLIENT_EMAIL` and `FIREBASE_PRIVATE_KEY` in `.env.local`).
 
 **Replace ALL listenings and set Start Date:**
 ```bash
@@ -95,7 +96,22 @@ node scripts/import-listenings.js --file listenings-template.xlsx --append
 
 ---
 
-## 6. How Publishing Works
+## 6. Managing Administrators
+
+Normal users cannot edit the schedule or listenings. To designate an administrator who can:
+
+1. Have the user sign into the app using their Google Account first (to create an Auth record).
+2. Run the included assign-admin script.
+   ```bash
+   node scripts/set-admin.js
+   ```
+3. This grants their Firebase token `admin: true` custom claims and writes their UID to the `/admins` collection in Firestore.
+
+Note: By default, the Daily Sadhana app uses the Node CLI explicitly for all data imports (`node scripts/import-listenings.js`). The frontend currently has no built-in Admin UI for safety.
+
+---
+
+## 7. How Publishing Works
 
 The app synchronizes a global sequence using the `config/startDate` document (e.g. `2026-03-10`). 
 However, **the actual published video is calculated based on the user's LOCAL timezone.**
@@ -125,11 +141,13 @@ Users' device-specific drafts disappear permanently upon submission or by clicki
    - `NEXT_PUBLIC_FIREBASE_API_KEY`
    - `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
    - `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
+   - `FIREBASE_CLIENT_EMAIL`
+   - `FIREBASE_PRIVATE_KEY` (Paste the exact raw string containing \n)
 3. Deploy.
 
 ---
 
-## 9. Testing & Acceptance
+## 10. Testing & Acceptance
 
 - **Date Testing:** Change your computer's system clock/date and refresh the page to see the listening index jump forward/backward.
 - **Audio Testing:** Ensure microphone permissions are granted. Record, pause, and preview. Note how the network tab shows NO payloads containing audio blobs during submission.

@@ -8,8 +8,8 @@ service cloud.firestore {
     // We assume the service account will manage listenings, so normal users only read.
     
     match /listenings/{document=**} {
-      allow read: if request.auth != null;
-      allow write: if false; // Only admin via service account CLI
+      allow read: if true; // Public read so unauthenticated homepage visitors can see today's track
+      allow write: if request.auth != null && request.auth.token.admin == true; // Admin via frontend or Service account CLI
     }
 
     match /submissions/{submissionId} {
@@ -26,8 +26,12 @@ service cloud.firestore {
     }
 
     match /config/startDate {
-      allow read: if request.auth != null;
-      allow write: if false; // Only admin via service account CLI
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.token.admin == true;
+    }
+    
+    match /admins/{adminId} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
     }
   }
 }

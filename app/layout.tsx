@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'Daily Sadhana - Bhakti Sastri',
   description: 'Daily listening portal for the Bhakti Sastri batch.',
   icons: {
-    icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/A.C._Bhaktivedanta_Swami_Prabhupada_1972.jpg/151px-A.C._Bhaktivedanta_Swami_Prabhupada_1972.jpg'
+    icon: '/SP.png'
   }
 };
 

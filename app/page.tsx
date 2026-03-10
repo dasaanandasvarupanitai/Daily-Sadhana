@@ -22,8 +22,8 @@ export default function Home() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#faf8f5]">
-        <Loader2 className="animate-spin text-orange-500 w-12 h-12" />
+      <div className="min-h-screen flex items-center justify-center bg-[#FDFbf7]">
+        <Loader2 className="animate-spin text-amber-600 w-12 h-12" />
       </div>
     );
   }
@@ -32,12 +32,12 @@ export default function Home() {
   const todayStr = new Date().toLocaleDateString('en-CA'); // 'YYYY-MM-DD' format broadly
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-x-hidden">
+    <div className="min-h-screen flex flex-col relative overflow-x-hidden bg-[#FDFbf7]">
       
       {/* Decorative Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-orange-100/60 to-transparent -z-10" />
-      <div className="absolute -top-40 -right-40 w-96 h-96 bg-orange-200/40 rounded-full blur-3xl -z-10" />
-      <div className="absolute top-60 -left-20 w-72 h-72 bg-red-100/40 rounded-full blur-3xl -z-10" />
+      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-amber-100/70 via-orange-50/30 to-transparent -z-10" />
+      <div className="absolute -top-40 -right-40 w-[30rem] h-[30rem] bg-amber-200/30 rounded-full blur-3xl -z-10" />
+      <div className="absolute top-60 -left-20 w-80 h-80 bg-rose-100/30 rounded-full blur-3xl -z-10" />
 
       <Navbar onTrackClick={() => setIsTrackModalOpen(true)} />
 
@@ -45,7 +45,7 @@ export default function Home() {
         
         {dbLoading ? (
           <div className="w-full flex justify-center py-20">
-            <Loader2 className="animate-spin text-orange-500 w-10 h-10" />
+            <Loader2 className="animate-spin text-amber-600 w-12 h-12" />
           </div>
         ) : (
           <>

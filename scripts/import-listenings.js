@@ -43,24 +43,24 @@ async function run() {
 
   // Load Firebase Service Account
   require('dotenv').config({ path: path.resolve(__dirname, '../.env.local') });
-  const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_PATH;
+  
+  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.FIREBASE_PROJECT_ID;
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+  // Handle escaped newlines in private keys when read from env files
+  const privateKey = process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') : undefined;
 
-  if (!serviceAccountPath) {
-    console.error("Error: FIREBASE_SERVICE_ACCOUNT_KEY_PATH is not set in .env.local");
-    process.exit(1);
-  }
-
-  let serviceAccount;
-  try {
-    serviceAccount = require(path.resolve(__dirname, '..', serviceAccountPath));
-  } catch (e) {
-    console.error("Failed to load service account key from", serviceAccountPath, e.message);
+  if (!projectId || !clientEmail || !privateKey) {
+    console.error("Error: FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, and FIREBASE_PRIVATE_KEY must be set in .env.local");
     process.exit(1);
   }
 
   if (!admin.apps.length) {
     admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount)
+      credential: admin.credential.cert({
+        projectId,
+        clientEmail,
+        privateKey
+      })
     });
   }
 

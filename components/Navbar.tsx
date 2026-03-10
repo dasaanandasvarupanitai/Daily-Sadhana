@@ -15,19 +15,18 @@ export function Navbar({ onTrackClick }: NavbarProps) {
   const { streak } = useUserStreak(user?.uid);
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#faf8f5]/80 backdrop-blur-md border-b border-orange-100 shadow-sm">
+    <nav className="sticky top-0 z-50 bg-[#FDFbf7]/90 backdrop-blur-md border-b border-amber-100 shadow-sm">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         
         {/* Left: Branding */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-full bg-orange-200 overflow-hidden border border-orange-300 shadow-inner flex-shrink-0 relative">
-            {/* Using a placeholder SVG or img for Srila Prabhupada portrait per requirements */}
-            <div className="absolute inset-0 flex justify-center items-center text-[10px] text-orange-800 font-bold bg-orange-100">
+          <div className="w-11 h-11 rounded-full bg-amber-100 overflow-hidden border-2 border-amber-300 shadow-[0_2px_10px_rgba(217,119,6,0.2)] flex-shrink-0 relative">
+            <div className="absolute inset-0 flex justify-center items-center text-[10px] text-amber-800 font-bold bg-amber-50">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/A.C._Bhaktivedanta_Swami_Prabhupada_1972.jpg/151px-A.C._Bhaktivedanta_Swami_Prabhupada_1972.jpg" alt="SP" className="w-full h-full object-cover object-top grayscale-[30%] contrast-125" />
+              <img src="/SP.png" alt="SP" className="w-full h-full object-cover object-top" />
             </div>
           </div>
-          <span className="font-extrabold text-xl text-gray-800 tracking-tight hidden sm:block group-hover:text-orange-600 transition-colors">
+          <span className="font-extrabold text-xl text-stone-800 tracking-tight hidden sm:block group-hover:text-amber-700 transition-colors">
             Daily Sadhana
           </span>
         </Link>
@@ -38,21 +37,21 @@ export function Navbar({ onTrackClick }: NavbarProps) {
           {user ? (
             <>
               {/* Streak */}
-              <div className="flex items-center gap-1.5 bg-white border border-gray-200 px-3 py-1.5 rounded-full shadow-sm" title="Current Streak">
-                <span className="text-orange-500 font-bold">🔥 {streak}</span>
+              <div className="flex items-center gap-1.5 bg-white border border-amber-200 px-3 py-1.5 rounded-full shadow-sm" title="Current Streak">
+                <span className="text-amber-600 font-bold text-sm">🔥 <span className="text-stone-700">{streak}</span></span>
               </div>
               
               {/* Track */}
               <button 
                 onClick={onTrackClick}
-                className="p-2 sm:px-3 sm:py-2 flex items-center gap-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-full sm:rounded-lg font-medium text-sm transition"
+                className="p-2 sm:px-3 sm:py-2 flex items-center gap-2 text-stone-600 hover:text-amber-700 hover:bg-amber-50 rounded-full sm:rounded-lg font-medium text-sm transition-colors"
               >
                 <Activity size={18} />
                 <span className="hidden sm:block">Track</span>
               </button>
 
               {/* Bookmarks */}
-              <Link href="/bookmarks" className="p-2 sm:px-3 sm:py-2 flex items-center gap-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-full sm:rounded-lg font-medium text-sm transition">
+              <Link href="/bookmarks" className="p-2 sm:px-3 sm:py-2 flex items-center gap-2 text-stone-600 hover:text-amber-700 hover:bg-amber-50 rounded-full sm:rounded-lg font-medium text-sm transition-colors">
                 <Bookmark size={18} />
                 <span className="hidden sm:block">Saved</span>
               </Link>
@@ -60,7 +59,7 @@ export function Navbar({ onTrackClick }: NavbarProps) {
               {/* Avatar Dropdown (Simplified to just an avatar that signs out on click for MVP) */}
               <button 
                 onClick={logout} 
-                className="w-8 h-8 rounded-full overflow-hidden border-2 border-transparent hover:border-red-400 transition ml-1"
+                className="w-9 h-9 rounded-full overflow-hidden border-2 border-transparent hover:border-amber-400 transition ml-1 shadow-sm"
                 title="Sign Out"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}

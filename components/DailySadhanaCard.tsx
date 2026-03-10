@@ -16,12 +16,12 @@ interface DailySadhanaCardProps {
   alreadySubmitted?: boolean;
 }
 
-export function DailySadhanaCard({ 
-  listening, 
-  publishedDateStr, 
-  isToday, 
-  onSubmitted, 
-  alreadySubmitted 
+export function DailySadhanaCard({
+  listening,
+  publishedDateStr,
+  isToday,
+  onSubmitted,
+  alreadySubmitted
 }: DailySadhanaCardProps) {
   const { user } = useAuth();
   const [showVideo, setShowVideo] = useState(false);
@@ -80,32 +80,35 @@ export function DailySadhanaCard({
   const displayDateStr = new Date(publishedDateStr + 'T00:00:00').toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
 
   return (
-    <div className="w-full max-w-2xl mx-auto rounded-[2rem] bg-[#fdfaf6] border border-orange-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden transition-all duration-300">
-      
+    <div className="w-full max-w-2xl mx-auto rounded-3xl bg-white border border-amber-100 shadow-[0_12px_40px_-12px_rgba(217,119,6,0.15)] overflow-hidden transition-all duration-300 relative">
+
+      {/* Top soft accent bar */}
+      <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-amber-400 via-orange-500 to-rose-400"></div>
+
       {/* Header Area */}
       <div className="p-6 sm:p-8 flex flex-col gap-4 relative">
-        <div className="flex justify-between items-start">
-          <div className="flex flex-col gap-1">
-            <span className="text-orange-600 font-bold uppercase tracking-wider text-xs">
+        <div className="flex justify-between items-start mt-2">
+          <div className="flex flex-col gap-1.5">
+            <span className="text-amber-700 font-bold uppercase tracking-widest text-[10px] flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
               Daily Sadhana
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-800 leading-tight">
               {isToday ? `Today's Listening` : `Listening for ${displayDateStr}`}
             </h2>
-            <p className="text-gray-500 text-sm font-medium">
+            <p className="text-stone-500 text-sm font-medium flex items-center gap-1.5">
               {displayDateStr}
             </p>
           </div>
-          
+
           <div className="flex flex-col gap-2 items-end">
-            <span className="bg-orange-100 text-orange-800 text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
-              #{listening.number}
+            <span className="bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap shadow-sm">
+              Track #{listening.number}
             </span>
             {isToday && (
-              <span className={`text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap ${
-                alreadySubmitted ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-              }`}>
-                {alreadySubmitted ? 'Submitted' : 'Published'}
+              <span className={`text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap shadow-sm border ${alreadySubmitted ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-sky-50 text-sky-700 border-sky-200'
+                }`}>
+                {alreadySubmitted ? '✓ Submitted' : 'Published'}
               </span>
             )}
           </div>
@@ -113,20 +116,20 @@ export function DailySadhanaCard({
 
         {/* Action Bar */}
         <div className="flex gap-2 items-center mt-2">
-          <button 
+          <button
             onClick={toggleBookmark}
             disabled={bookmarking}
-            className={`p-2 rounded-full transition-colors flex items-center justify-center ${bookmarked ? 'bg-orange-100 text-orange-600' : 'bg-white text-gray-400 hover:text-orange-500 hover:bg-orange-50'} shadow-sm border border-gray-100`}
+            className={`p-2 rounded-full transition-all flex items-center justify-center shadow-sm border ${bookmarked ? 'bg-orange-50 text-orange-600 border-orange-500' : 'bg-white text-stone-400 border-orange-400 hover:border-orange-500 hover:text-orange-600 hover:bg-orange-50'}`}
             title="Bookmark"
           >
-            {bookmarking ? <Loader2 size={18} className="animate-spin" /> : <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} />}
+            {bookmarking ? <Loader2 size={18} className="animate-spin" /> : <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} strokeWidth={bookmarked ? 1 : 2} />}
           </button>
-          
+
           <a
             href={listening.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex items-center gap-2 justify-center py-2 px-4 bg-white border border-gray-200 shadow-sm rounded-full text-sm font-semibold text-gray-700 hover:text-red-600 hover:border-red-200 transition-colors"
+            className="flex-1 flex items-center gap-2 justify-center py-2 px-4 bg-white border border-stone-200 shadow-sm rounded-full text-sm font-semibold text-stone-700 hover:text-red-600 hover:border-red-200 hover:bg-red-50 transition-all"
           >
             <Youtube size={18} className="text-red-500" /> Watch on YouTube
           </a>
@@ -135,19 +138,19 @@ export function DailySadhanaCard({
 
       {/* Content Area */}
       <div className="px-6 sm:px-8 pb-6 sm:pb-8">
-        <h3 className="text-xl font-bold text-gray-800 mb-6 border-l-4 border-orange-400 pl-4">{listening.title}</h3>
+        <h3 className="text-xl font-bold text-stone-800 mb-6 border-l-4 border-amber-400 pl-4 py-1 bg-gradient-to-r from-amber-50 to-transparent">{listening.title}</h3>
 
         {videoId ? (
           <div className="mt-4 rounded-xl overflow-hidden bg-black aspect-video relative group">
             {!showVideo ? (
-              <div 
+              <div
                 className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer hover:bg-white/10 transition-colors"
                 onClick={() => setShowVideo(true)}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`} 
-                  alt={listening.title} 
+                <img
+                  src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+                  alt={listening.title}
                   className="absolute inset-0 w-full h-full object-cover opacity-60"
                 />
                 <PlayCircle size={64} className="text-white relative z-10 drop-shadow-lg opacity-90 group-hover:scale-110 transition-transform" />
@@ -173,7 +176,7 @@ export function DailySadhanaCard({
         )}
 
         {isToday && onSubmitted && (
-          <SubmitPanel 
+          <SubmitPanel
             listeningNumber={listening.number}
             publishedDateStr={publishedDateStr}
             onSubmitted={onSubmitted}
