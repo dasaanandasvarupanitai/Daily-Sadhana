@@ -118,9 +118,9 @@ export function DailySadhanaCard({
         <div className="flex gap-2 items-center mt-2">
           <button
             onClick={toggleBookmark}
-            disabled={bookmarking}
-            className={`p-2 rounded-full transition-all flex items-center justify-center shadow-sm border ${bookmarked ? 'bg-orange-50 text-orange-600 border-orange-500' : 'bg-white text-stone-400 border-orange-400 hover:border-orange-500 hover:text-orange-600 hover:bg-orange-50'}`}
-            title="Bookmark"
+            disabled={bookmarking || !user}
+            className={`p-2 rounded-full transition-all flex items-center justify-center shadow-sm border ${bookmarked ? 'bg-orange-50 text-orange-600 border-orange-500' : 'bg-white text-stone-400 border-orange-400 hover:border-orange-500 hover:text-orange-600 hover:bg-orange-50'} ${!user ? 'opacity-50 cursor-not-allowed' : ''}`}
+            title={user ? "Bookmark" : "Sign in to bookmark"}
           >
             {bookmarking ? <Loader2 size={18} className="animate-spin" /> : <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} strokeWidth={bookmarked ? 1 : 2} />}
           </button>
@@ -175,7 +175,7 @@ export function DailySadhanaCard({
           </div>
         )}
 
-        {isToday && onSubmitted && (
+        {isToday && onSubmitted && user && (
           <SubmitPanel
             listeningNumber={listening.number}
             publishedDateStr={publishedDateStr}

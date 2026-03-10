@@ -32,24 +32,24 @@ let cachedConfig: Config | null = null;
 
 export async function fetchAllListenings() {
   if (cachedListenings) return cachedListenings;
-  
+
   const q = query(collection(db, 'listenings'), orderBy('orderIndex', 'asc'));
   const snapshot = await getDocs(q);
   const listenings: Listening[] = [];
   snapshot.forEach(doc => {
     listenings.push({ id: doc.id, ...doc.data() } as Listening);
   });
-  
+
   cachedListenings = listenings;
   return listenings;
 }
 
 export async function fetchConfig() {
   if (cachedConfig) return cachedConfig;
-  
+
   const docRef = doc(db, 'config', 'startDate');
   const docSnap = await getDoc(docRef);
-  
+
   if (docSnap.exists()) {
     cachedConfig = docSnap.data() as Config;
     return cachedConfig;
@@ -63,8 +63,9 @@ export function useTodayListening(userId: string | undefined) {
   const [loading, setLoading] = useState(true);
   const [startDateStr, setStartDateStr] = useState<string | null>(null);
 
+  // Phase 1: Fetch public listening data immediately (no auth needed)
   useEffect(() => {
-    async function loadToday() {
+    async function loadListening() {
       try {
         const [config, allListenings] = await Promise.all([
           fetchConfig(),
@@ -79,23 +80,8 @@ export function useTodayListening(userId: string | undefined) {
         setStartDateStr(config.startDate);
 
         const index = getDailyListeningIndex(config.startDate, allListenings.length);
-        
         if (index >= 0) {
-          const todayItem = allListenings[index];
-          setListening(todayItem);
-          
-          if (userId) {
-            const todayStr = formatLocalDateString();
-            const q = query(
-              collection(db, 'submissions'),
-              where('userId', '==', userId),
-              where('publishedDate', '==', todayStr)
-            );
-            const subSnap = await getDocs(q);
-            if (!subSnap.empty) {
-              setSubmission({ id: subSnap.docs[0].id, ...subSnap.docs[0].data() } as Submission);
-            }
-          }
+          setListening(allListenings[index]);
         }
       } catch (err) {
         console.error("Error loading today's listening:", err);
@@ -103,8 +89,30 @@ export function useTodayListening(userId: string | undefined) {
         setLoading(false);
       }
     }
-    loadToday();
-  }, [userId]);
+    loadListening();
+  }, []); // runs once on mount, no auth dependency
+
+  // Phase 2: Check submission status once user is authenticated
+  useEffect(() => {
+    if (!userId || !listening) return;
+    async function checkSubmission() {
+      try {
+        const todayStr = formatLocalDateString();
+        const q = query(
+          collection(db, 'submissions'),
+          where('userId', '==', userId),
+          where('publishedDate', '==', todayStr)
+        );
+        const subSnap = await getDocs(q);
+        if (!subSnap.empty) {
+          setSubmission({ id: subSnap.docs[0].id, ...subSnap.docs[0].data() } as Submission);
+        }
+      } catch (err) {
+        console.error("Error checking submission:", err);
+      }
+    }
+    checkSubmission();
+  }, [userId, listening]);
 
   return { listening, submission, loading, startDateStr };
 }
@@ -132,7 +140,7 @@ export function usePreviousListenings(userId: string | undefined) {
 
       const totalListenings = allListenings.length;
       const todayIndex = getDailyListeningIndex(config.startDate, totalListenings);
-      
+
       if (todayIndex < 0) {
         // Hasn't started yet
         setLoading(false);
@@ -142,18 +150,18 @@ export function usePreviousListenings(userId: string | undefined) {
       // We want to load from (pageOffset) to (pageOffset + PAGE_SIZE - 1) days back
       const newItems: { listening: Listening; publishedDate: string }[] = [];
       const localDate = new Date();
-      
+
       for (let i = 0; i < PAGE_SIZE; i++) {
         const daysBack = pageOffset + i;
-        
+
         // Calculate the target date local midnight
         const [year, month, day] = config.startDate.split('-').map(Number);
         const startLocal = new Date(year, month - 1, day);
-        
+
         // Check if daysBack puts us before the start date
         const currentTarget = new Date(localDate);
         currentTarget.setDate(currentTarget.getDate() - daysBack);
-        
+
         // If currentTarget is before startLocal, we stop
         currentTarget.setHours(0, 0, 0, 0);
         if (currentTarget < startLocal) {
@@ -170,7 +178,7 @@ export function usePreviousListenings(userId: string | undefined) {
           listening: allListenings[pastIndex],
           publishedDate: formatLocalDateString(currentTarget)
         });
-        
+
         if (i === PAGE_SIZE - 1) {
           setHasMore(true);
         }
@@ -187,7 +195,7 @@ export function usePreviousListenings(userId: string | undefined) {
 
   useEffect(() => {
     loadMore();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   return { listenings, loading, loadMore, hasMore };
@@ -212,26 +220,26 @@ export function useUserStreak(userId: string | undefined) {
           where('submitted', '==', true),
           orderBy('publishedDate', 'desc')
         );
-        
+
         const snaps = await getDocs(q);
         if (snaps.empty) {
           setStreak(0);
           setLoading(false);
           return;
         }
-        
+
         // Count consecutive days from today or yesterday
         const todayStr = formatLocalDateString();
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
         const yesterdayStr = formatLocalDateString(yesterday);
-        
+
         const submittedDates = new Set(snaps.docs.map(d => d.data().publishedDate));
-        
+
         let currentStreak = 0;
         let testDate = new Date();
         let testStr = formatLocalDateString(testDate);
-        
+
         // If today is not submitted, check if yesterday was. If neither, streak is 0.
         if (!submittedDates.has(todayStr)) {
           if (!submittedDates.has(yesterdayStr)) {
@@ -243,14 +251,14 @@ export function useUserStreak(userId: string | undefined) {
           testDate = yesterday;
           testStr = yesterdayStr;
         }
-        
+
         // Count backwards
         while (submittedDates.has(testStr)) {
           currentStreak++;
           testDate.setDate(testDate.getDate() - 1);
           testStr = formatLocalDateString(testDate);
         }
-        
+
         setStreak(currentStreak);
       } catch (e) {
         console.error("Error computing streak", e);
