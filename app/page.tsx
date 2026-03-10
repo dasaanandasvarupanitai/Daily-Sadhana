@@ -50,7 +50,7 @@ export default function Home() {
               alreadySubmitted={submittedToday}
             />
 
-            <PreviousListeningsList />
+            {user && <PreviousListeningsList />}
           </>
         )}
 
