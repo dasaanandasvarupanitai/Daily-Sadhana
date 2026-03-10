@@ -1,0 +1,34 @@
+﻿app/bookmarks/page.tsx(4,24): error TS2307: Cannot find module '@/components/Navbar' or its corresponding type declarations.
+app/bookmarks/page.tsx(5,28): error TS2307: Cannot find module '@/components/TrackModal' or its corresponding type declarations.
+app/bookmarks/page.tsx(6,25): error TS2307: Cannot find module '@/lib/auth-context' or its corresponding type declarations.
+app/bookmarks/page.tsx(7,20): error TS2307: Cannot find module '@/lib/firebase' or its corresponding type declarations.
+app/layout.tsx(4,30): error TS2307: Cannot find module '@/lib/auth-context' or its corresponding type declarations.
+app/page.tsx(4,24): error TS2307: Cannot find module '@/components/Navbar' or its corresponding type declarations.
+app/page.tsx(5,34): error TS2307: Cannot find module '@/components/DailySadhanaCard' or its corresponding type declarations.
+app/page.tsx(6,40): error TS2307: Cannot find module '@/components/PreviousListeningsList' or its corresponding type declarations.
+app/page.tsx(7,28): error TS2307: Cannot find module '@/components/TrackModal' or its corresponding type declarations.
+app/page.tsx(8,25): error TS2307: Cannot find module '@/lib/auth-context' or its corresponding type declarations.
+app/page.tsx(9,35): error TS2307: Cannot find module '@/lib/firestore' or its corresponding type declarations.
+components/DailySadhanaCard.tsx(4,27): error TS2307: Cannot find module '@/lib/firestore' or its corresponding type declarations.
+components/DailySadhanaCard.tsx(7,20): error TS2307: Cannot find module '@/lib/firebase' or its corresponding type declarations.
+components/DailySadhanaCard.tsx(8,25): error TS2307: Cannot find module '@/lib/auth-context' or its corresponding type declarations.
+components/Navbar.tsx(4,25): error TS2307: Cannot find module '@/lib/auth-context' or its corresponding type declarations.
+components/Navbar.tsx(7,31): error TS2307: Cannot find module '@/lib/firestore' or its corresponding type declarations.
+components/PreviousListeningsList.tsx(4,25): error TS2307: Cannot find module '@/lib/auth-context' or its corresponding type declarations.
+components/PreviousListeningsList.tsx(5,39): error TS2307: Cannot find module '@/lib/firestore' or its corresponding type declarations.
+components/PreviousListeningsList.tsx(8,20): error TS2307: Cannot find module '@/lib/firebase' or its corresponding type declarations.
+components/PreviousListeningsList.tsx(51,26): error TS7006: Parameter 'item' implicitly has an 'any' type.
+components/PreviousListeningsList.tsx(51,32): error TS7006: Parameter 'i' implicitly has an 'any' type.
+components/SubmitPanel.tsx(5,60): error TS2307: Cannot find module '@/lib/local-storage' or its corresponding type declarations.
+components/SubmitPanel.tsx(8,20): error TS2307: Cannot find module '@/lib/firebase' or its corresponding type declarations.
+components/SubmitPanel.tsx(9,25): error TS2307: Cannot find module '@/lib/auth-context' or its corresponding type declarations.
+components/SubmitPanel.tsx(10,39): error TS2307: Cannot find module '@/lib/schedule' or its corresponding type declarations.
+components/SubmitPanel.tsx(56,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+components/SubmitPanel.tsx(60,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+components/SubmitPanel.tsx(67,16): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+components/SubmitPanel.tsx(82,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+components/TrackModal.tsx(5,25): error TS2307: Cannot find module '@/lib/auth-context' or its corresponding type declarations.
+components/TrackModal.tsx(6,54): error TS2307: Cannot find module '@/lib/firestore' or its corresponding type declarations.
+components/TrackModal.tsx(8,20): error TS2307: Cannot find module '@/lib/firebase' or its corresponding type declarations.
+lib/firestore.ts(141,13): error TS7034: Variable 'newItems' implicitly has type 'any[]' in some locations where its type cannot be determined.
+lib/firestore.ts(177,42): error TS7005: Variable 'newItems' implicitly has an 'any[]' type.

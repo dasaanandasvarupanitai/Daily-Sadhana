@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Admins (replace with actual admin UIDs if needed, or rely on service account)
+    // Here we restrict configuration writes to admin only.
+    // We assume the service account will manage listenings, so normal users only read.
+    
+    match /listenings/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if false; // Only admin via service account CLI
+    }
+
+    match /submissions/{submissionId} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create, update, delete: if request.auth != null && request.auth.uid == request.resource.data.userId && request.resource.data.submitted == true;
+    }
+
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    match /bookmarks/{userId}/userBookmarks/{bookmarkId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /config/startDate {
+      allow read: if request.auth != null;
+      allow write: if false; // Only admin via service account CLI
+    }
+  }
+}
